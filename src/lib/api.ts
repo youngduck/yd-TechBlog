@@ -69,6 +69,27 @@ export function getAllCategoriesID(): string[] {
   return Array.from(categoryMap.keys());
 }
 
+export async function getAllScrapList() {
+  const response = await fetch(
+    `https://api.notion.com/v1/databases/${process.env.NOTION_DATABASE_ID}/query`,
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Notion-Version": "2022-06-28",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.NOTION_TOKEN}`,
+      },
+      body: JSON.stringify({ page_size: 100 }),
+    }
+  );
+  console.log("이게왜", NOTION_DATABASE_ID);
+  const responseData = await response.json();
+  const dummy = responseData.results.map((item: any) => item.properties);
+  console.log(dummy, "dummy");
+  return responseData;
+}
+
 export const generateRSS = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASED_URL;
 
